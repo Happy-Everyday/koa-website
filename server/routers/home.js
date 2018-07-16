@@ -1,4 +1,3 @@
-const router = require('koa-router')()
 
 const callbackHome = async ctx => {
     await ctx.render('home', {
@@ -6,7 +5,6 @@ const callbackHome = async ctx => {
         name: "World"
       })
 }
-
 
 module.exports = [
     {
