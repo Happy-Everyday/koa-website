@@ -10,16 +10,14 @@ const bodyParser = require('koa-bodyparser')
 
 const port = 3000
 const viewsH = require('../views/index')
+const controller = require('./middleware/controller')
 
 app.use(bodyParser())
 
 app.use(static(path.join(__dirname, '../public')))
 app.use(views(path.join(__dirname, '../views'), viewsH))
 
-
-router.get('/', async ctx => {
-	await ctx.render('home')
-})
+app.use(controller())
 
 router.post('/signin', async (ctx, next) => {
 	var name = ctx.request.body.name || '',
