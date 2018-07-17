@@ -9,14 +9,12 @@ var callbackSignin = async (ctx) => {
     }
 }
 
-
 const callbackWxLogin = async ctx => {
     let code = ctx.query.code || ''
     ctx.response.status = 200
     ctx.response.body = {code: 0000, msg: 'success', data: {}}
     console.log(`signin with code: ${code}`)
 }
-
 
 module.exports = [
     {
