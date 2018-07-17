@@ -26,7 +26,7 @@ app.use(cors(corsConfig))
 
 app.use(router.routes())
 
-app.use(logger)
+app.use(logger())
 app.listen(port)
 console.log(`.......................`)
 console.log(`app listen at ${port}`)
