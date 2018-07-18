@@ -7,7 +7,6 @@ const router = require('koa-router')()
 const bodyParser = require('koa-bodyparser')
 const logger = require('koa-logger')
 
-
 const app = new Koa()
 const { port, dbUrl, corsConfig} = require('./config')
 const viewsH = require('../views/index')

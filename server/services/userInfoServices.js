@@ -1,5 +1,12 @@
+const bcrypt = require('bcrypt')
+
 const User = require('../models/userModel')
 const util = require('../util')
+
+const Store = require('../lib/store')
+const store = new Store()
+
+const saltRounds = 10
 
 const findUserInfo = function (options) {
     return new Promise((resolve, reject) => {
@@ -8,6 +15,22 @@ const findUserInfo = function (options) {
                 reject(err)
             else
                 resolve(res)
+        })
+    })
+}
+
+const getSession = function (nickName) {
+    let timeTemp = new Date().getTime()
+    return new Promise(function(resolve, reject) {
+        bcrypt.genSalt(saltRounds, function (err, salt) {
+            if (err) {
+                reject(err)
+            } else {
+                bcrypt.hash(`${nickName}${timeTemp}`, salt, function (err, sessionId) {
+                    if (err) { reject(err) }
+                    resolve(sessionId)
+                });
+            }
         })
     })
 }
@@ -56,6 +79,7 @@ const userSignupService = async function (ctx) {
 const userSigninService = async function (ctx) {
     let nickName = ctx.request.body.userName
     let password = ctx.request.body.userPassword
+    let cookie = ctx.cookies || {}
     if (nickName && password) {
         return new Promise((resolve, reject) => {
             User.findOne({ nickName: nickName }, function (err, user) {
@@ -67,15 +91,30 @@ const userSigninService = async function (ctx) {
                         data: 0
                     })
                 } else {
-                    user.comparePassword(password, function (err, isMatched) {
-                        if ( err ) { 
+                    user.comparePassword(password, async function (err, isMatched) {
+                        if (err) {
                             reject(err)
                         } else if (isMatched) {
                             console.log('Password is matched!')
+                            let timeTemp = new Date().getTime()
+                            let session = await getSession(nickName)
+                            let sessionId = await store.set(session, nickName + timeTemp)
+                            ctx.cookies.set(
+                                'sessionId', sessionId,{
+                                    domain:'localhost', // 写cookie所在的域名
+                                    path:'/',       // 写cookie所在的路径
+                                    maxAge: 2*60*60*1000,   // cookie有效时长
+                                    expires:new Date('2018-10-08'), // cookie失效时间
+                                    httpOnly:false,  // 是否只用于http请求中获取
+                                    overwrite:false  // 是否允许重写
+                                }
+                            );
                             resolve({
                                 code: '000000',
                                 msg: '登录成功！',
-                                data: 0
+                                data: {
+                                    sessionId: sessionId 
+                                }
                             })
                         } else {
                             console.log('Password is not matched!')
@@ -100,6 +139,7 @@ const userSigninService = async function (ctx) {
 
 
 module.exports = {
+    store: store,
     userSignupService: userSignupService,
     userSigninService: userSigninService
 }
