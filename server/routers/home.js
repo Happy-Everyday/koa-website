@@ -1,7 +1,7 @@
 
 const callbackHome = async ctx => {
     await ctx.render('home', {
-        title: "XYTang",
+        title: "website",
         name: "World"
       })
 }

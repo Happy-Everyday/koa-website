@@ -2,7 +2,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <a href="/" class="narbar-brand"></a>主页</a>
+            <a href="/" class="narbar-brand">主页</a>
         </div>
         <p class="navbar-text navbar-right">
             <a href="#" class="navbar-link" data-toggle="modal" data-target='#signupModal'>注册</a>
@@ -18,11 +18,11 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="signupName">用户名</label>
-                            <input type="text" id="signupName" class="form-control" name='userName'>
+                            <input type="text" id="signupName" class="form-control" name='userName' autocomplete="off"/>
                         </div>
                         <div class="form-group">
-                            <label for="signupName">密码</label>
-                            <input type="text" id="signupPassword" class="form-control" name='userPassword'>
+                            <label for="signupPassword">密码</label>
+                            <input type="password" id="signupPassword" class="form-control" name='userPassword'/>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -41,11 +41,11 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="signinName">用户名</label>
-                            <input type="text" id="signupName" class="form-control" name='userName'>
+                            <input type="text" id="signinName" class="form-control" name='userName' autocomplete="off"/>
                         </div>
                         <div class="form-group">
-                            <label for="signinName">密码</label>
-                            <input type="text" id="signupPassword" class="form-control" name='userPassword'>
+                            <label for="signinPassword">密码</label>
+                            <input type="password" id="signinPassword" class="form-control" name='userPassword'/>
                         </div>
                     </div>
                     <div class="modal-footer">
