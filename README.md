@@ -4,4 +4,4 @@ koa2 project
 
 > npm i
 
-> node server/app.js
+> npm start

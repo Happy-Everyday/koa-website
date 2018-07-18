@@ -11,7 +11,8 @@ function addControllers(router) {
     })
 
     for (let f of js_files) {
-        util.consoleText(`process controller`, `${f}...`)
+        console.log(``)
+        console.log(`process controller: ${f}`)
         let mapping = require(path.join(__dirname, '../routers/' + f))
         mapping.forEach(item => {
             addMapping(router, item)
@@ -23,11 +24,11 @@ function addMapping(router, route) {
     switch (route.method) {
         case 'GET':
             router.get(route.path, route.cbFnc)
-            util.consoleText(`router mapping`, `${route.method} ${route.path}`)
+            console.log(`  router mapping: ${route.method} ${route.path}`)
             break;
             case 'POST':
             router.post(route.path, route.cbFnc)
-            util.consoleText(`router mapping`, `${route.method} ${route.path}`)
+            console.log(`  router mapping: ${route.method} ${route.path}`)
             break;
     }
 }
