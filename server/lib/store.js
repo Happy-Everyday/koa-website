@@ -29,5 +29,7 @@ class RedisStore extends Store {
         return await this.redis.del(`SESSION:${sid}`);
     }
 }
+
+const store = new RedisStore
  
-module.exports = RedisStore;
+module.exports = store;

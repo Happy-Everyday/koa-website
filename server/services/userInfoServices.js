@@ -3,10 +3,9 @@ const bcrypt = require('bcrypt')
 const User = require('../models/userModel')
 const util = require('../util')
 
-const { formatCookie } = require('../lib/format')
+const { formatCookie } = require('../util')
 
-const Store = require('../lib/store')
-const store = new Store()
+const store = require('../lib/store')
 
 const saltRounds = 10
 

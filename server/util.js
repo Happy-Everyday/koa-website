@@ -6,6 +6,17 @@ const consoleText = (title, content) => {
     console.log(``)
 }
 
+const formatCookie = function (cookie) {
+	let cookieArr = cookie? cookie.split('; '): []
+	let cookieObj = {}
+	cookieArr.forEach(item => {
+		let itemArr = item.split('=')
+		cookieObj[itemArr[0]] = itemArr[1]
+	});
+	return cookieObj
+}
+
 module.exports = {
-    consoleText: consoleText 
+    consoleText: consoleText,
+    formatCookie: formatCookie 
 }

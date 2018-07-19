@@ -1,7 +1,6 @@
 const { store } = require('../services/userInfoServices')
 
-const { formatCookie } = require('../lib/format')
-
+const { formatCookie } = require('../util')
 
 const callbackHome = async ctx => {
 	let cookie = formatCookie(ctx.header.cookie)
