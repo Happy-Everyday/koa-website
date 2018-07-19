@@ -7,8 +7,6 @@ const { formatCookie } = require('../util')
 
 const store = require('../lib/store')
 
-const saltRounds = 10
-
 const findUserInfo = function (options) {
     return new Promise((resolve, reject) => {
         User.find(options, (err, res) => {
@@ -16,22 +14,6 @@ const findUserInfo = function (options) {
                 reject(err)
             else
                 resolve(res)
-        })
-    })
-}
-
-const getSession = function (nickName) {
-    let timeTemp = new Date().getTime()
-    return new Promise(function(resolve, reject) {
-        bcrypt.genSalt(saltRounds, function (err, salt) {
-            if (err) {
-                reject(err)
-            } else {
-                bcrypt.hash(`${nickName}${timeTemp}`, salt, function (err, sessionId) {
-                    if (err) { reject(err) }
-                    resolve(sessionId)
-                });
-            }
         })
     })
 }
@@ -171,9 +153,33 @@ const userSignoutService = async function(ctx) {
 }
 
 
+const userUserListService = async function(ctx) {
+    let cookies = formatCookie(ctx.header.cookie)
+    let sessionId = cookies.sessionId
+    if (!sessionId) {
+        return {
+            code: '000007',
+            msg: '请先登录！',
+            data: 0 
+        }
+    }
+    let user = await store.get(sessionId)
+    let userList = await findUserInfo({})
+    return {
+        code: '000000',
+        msg: '登出成功',
+        data: {
+            userList: userList,
+            user: user
+        }
+    }
+}
+
+
 module.exports = {
     store: store,
     userSignupService: userSignupService,
     userSigninService: userSigninService,
-    userSignoutService: userSignoutService
+    userSignoutService: userSignoutService,
+    userUserListService: userUserListService
 }

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style/main.css">
+</head>
+<title>{{title}}</title>
+
+<body>
+    {{!-- 导航头部 --}} 
+    {{> header }}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>用户名</th>
+                            <th>昵称</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#if userList}}
+                            {{#each userList}}
+                                <tr>
+                                    <td>{{this.userName}}</td>
+                                    <td>{{this.nickName}}</td>
+                                    <td><button class="btn btn-sm btn-danger">删除</button></td>
+                                </tr>
+                            {{/each}}
+                        {{else}}
+                            <p>no data!!</p>
+                        {{/if}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+
+</html>

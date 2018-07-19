@@ -24,6 +24,22 @@ const callbackUserSignout = async ctx => {
      }
 }
 
+const callbackUserList = async ctx => {
+    let result = await userInfoServices.userUserListService(ctx)
+    if (result && result.code == '000000') {
+        await ctx.render('users', {
+            title: "website",
+            name: "World",
+            userList: result.data.userList,
+            user: {
+                nickName: result.data.user.nickName
+            }
+        })
+     } else {
+         ctx.redirect('/')
+     }
+}
+
 module.exports = [
     {
         method: 'POST',
@@ -39,5 +55,10 @@ module.exports = [
         method: 'GET',
         path: '/user/signout',
         cbFnc: callbackUserSignout
+    },
+    {
+        method: 'GET',
+        path: '/user/list',
+        cbFnc: callbackUserList
     }
 ]
