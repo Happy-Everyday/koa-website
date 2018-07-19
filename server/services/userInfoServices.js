@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt')
 const User = require('../models/userModel')
 const util = require('../util')
 
+const { formatCookie } = require('../lib/format')
+
 const Store = require('../lib/store')
 const store = new Store()
 
@@ -36,10 +38,19 @@ const getSession = function (nickName) {
 }
 
 const userSignupService = async function (ctx) {
-    let nickName = ctx.request.body.userName
+    let userName = ctx.request.body.userName
+    let nickName = ctx.request.body.nickName
     let password = ctx.request.body.userPassword
-    if (nickName && password) {
-        let results = await findUserInfo({ nickName: nickName })
+    let userRePassword = ctx.request.body.userRePassword
+    if (password !== userRePassword) {
+        return {
+            code: '00001',
+            msg: 'userRePassword 和 password 不一致!',
+            data: 0
+        }
+    }
+    if (userName && password && nickName) {
+        let results = await findUserInfo({ userName: userName })
         util.consoleText(`find users list`, results)
         if (results.length > 0) {
             return {
@@ -49,6 +60,7 @@ const userSignupService = async function (ctx) {
             }
         } else {
             let newUser = new User({
+                userName: userName,
                 nickName: nickName,
                 password: password
             })
@@ -77,12 +89,11 @@ const userSignupService = async function (ctx) {
 
 
 const userSigninService = async function (ctx) {
-    let nickName = ctx.request.body.userName
+    let userName = ctx.request.body.userName
     let password = ctx.request.body.userPassword
-    let cookie = ctx.cookies || {}
-    if (nickName && password) {
+    if (userName && password) {
         return new Promise((resolve, reject) => {
-            User.findOne({ nickName: nickName }, function (err, user) {
+            User.findOne({ userName: userName }, function (err, user) {
                 if (err) { reject(err) }
                 if (!user) {
                     resolve({
@@ -97,18 +108,20 @@ const userSigninService = async function (ctx) {
                         } else if (isMatched) {
                             console.log('Password is matched!')
                             let timeTemp = new Date().getTime()
-                            let session = await getSession(nickName)
-                            let sessionId = await store.set(session, nickName + timeTemp)
+                            let session = {
+                                nickName: user.nickName
+                            }
+                            let sessionId = await store.set(session, user.userName + timeTemp)
                             ctx.cookies.set(
                                 'sessionId', sessionId,{
                                     domain:'localhost', // 写cookie所在的域名
                                     path:'/',       // 写cookie所在的路径
-                                    maxAge: 2*60*60*1000,   // cookie有效时长
+                                    maxAge: 7*24*60*60*1000,   // cookie有效时长
                                     expires:new Date('2018-10-08'), // cookie失效时间
                                     httpOnly:false,  // 是否只用于http请求中获取
                                     overwrite:false  // 是否允许重写
                                 }
-                            );
+                            )
                             resolve({
                                 code: '000000',
                                 msg: '登录成功！',
@@ -137,9 +150,31 @@ const userSigninService = async function (ctx) {
     }
 }
 
+const userSignoutService = async function(ctx) {
+    let cookie = formatCookie(ctx.header.cookie)
+    let sessionId = cookie.sessionId
+    await store.destroy(sessionId)
+    await ctx.cookies.set(
+        'sessionId', sessionId,{
+            domain:'localhost', // 写cookie所在的域名
+            path:'/',       // 写cookie所在的路径
+            maxAge: -1,   // cookie有效时长
+            expires: -1, // cookie失效时间
+            httpOnly:false,  // 是否只用于http请求中获取
+            overwrite:false  // 是否允许重写
+        }
+    )
+    return {
+        code: '000000',
+        msg: '登出成功',
+        data: 0
+    }
+}
+
 
 module.exports = {
     store: store,
     userSignupService: userSignupService,
-    userSigninService: userSigninService
+    userSigninService: userSigninService,
+    userSignoutService: userSignoutService
 }

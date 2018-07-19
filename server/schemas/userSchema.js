@@ -4,6 +4,9 @@ const saltRounds = 10
 
 const userSchema = new mongoose.Schema({
     nickName: {
+        type: String
+    },
+    userName: {
         unique: true,
         type: String
     },

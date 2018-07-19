@@ -1,19 +1,20 @@
-const { store} = require('../services/userInfoServices')
+const { store } = require('../services/userInfoServices')
 
 const { formatCookie } = require('../lib/format')
 
 
 const callbackHome = async ctx => {
 	let cookie = formatCookie(ctx.header.cookie)
-	let sessionId = cookie.sessionId
-	console.log('sessionId: ' + sessionId)
+    let sessionId = cookie.sessionId
+    let sessionUser = null
 	if (sessionId) {
-		let session = await store.get(sessionId)
-		console.log('session: ' + session)
+		sessionUser = await store.get(sessionId)
+		console.log('session: ' + JSON.stringify(sessionUser))
 	}
     await ctx.render('home', {
         title: "website",
-        name: "World"
+        name: "World",
+        user: sessionUser
       })
 }
 

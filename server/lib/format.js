@@ -1,5 +1,5 @@
 const formatCookie = function (cookie) {
-	let cookieArr = cookie.split('; ')
+	let cookieArr = cookie? cookie.split('; '): []
 	let cookieObj = {}
 	cookieArr.forEach(item => {
 		let itemArr = item.split('=')

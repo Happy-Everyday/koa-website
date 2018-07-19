@@ -22,7 +22,6 @@ app.use(views(path.join(__dirname, '../views'), viewsH))
 
 app.use(controller())
 app.use(cors(corsConfig))
-
 app.use(router.routes())
 
 app.use(logger())

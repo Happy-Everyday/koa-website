@@ -2,13 +2,21 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <a href="/" class="narbar-brand">主页</a>
+            <a href="/" class="narbar-brand"></a>
         </div>
-        <p class="navbar-text navbar-right">
-            <a href="#" class="navbar-link" data-toggle="modal" data-target='#signupModal'>注册</a>
-            <span>|</span>
-            <a href="#" class="navbar-link" data-toggle="modal" data-target='#signinModal'>登录</a>
-        </p>
+        {{#if user.nickName}}
+            <p class="navbar-text navbar-right">
+                <span>欢迎, {{user.nickName}}</span>
+                <a href="/user/signout" class="navbar-link">登出</a>
+            </p>  
+        {{else}}
+            <p class="navbar-text navbar-right">
+                <a href="#" class="navbar-link" data-toggle="modal" data-target='#signupModal'>注册</a>
+                <span>|</span>
+                <a href="#" class="navbar-link" data-toggle="modal" data-target='#signinModal'>登录</a>
+            </p>
+        {{/if}}
+        
     </div>
     <div id="signupModal" class="modal fade">
         <div class="modal-dialog">
@@ -17,12 +25,20 @@
                     <div class="modal-header">注册</div>
                     <div class="modal-body">
                         <div class="form-group">
+                            <label for="signupNickName">昵称</label>
+                            <input type="text" id="signupNickName" class="form-control" name='nickName' autocomplete="off"/>
+                        </div>
+                        <div class="form-group">
                             <label for="signupName">用户名</label>
                             <input type="text" id="signupName" class="form-control" name='userName' autocomplete="off"/>
                         </div>
                         <div class="form-group">
                             <label for="signupPassword">密码</label>
                             <input type="password" id="signupPassword" class="form-control" name='userPassword'/>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupRePassword">重复密码</label>
+                            <input type="password" id="signupRePassword" class="form-control" name='userRePassword'/>
                         </div>
                     </div>
                     <div class="modal-footer">

@@ -16,6 +16,14 @@ const callbackUserSignin = async ctx => {
      }
 }
 
+const callbackUserSignout = async ctx => {
+    let result = await userInfoServices.userSignoutService(ctx)
+    ctx.redirect('/')
+    if (result && result.code !== '000000') {
+         console.log(result)
+     }
+}
+
 module.exports = [
     {
         method: 'POST',
@@ -26,5 +34,10 @@ module.exports = [
         method: 'POST',
         path: '/user/signin',
         cbFnc: callbackUserSignin
+    },
+    {
+        method: 'GET',
+        path: '/user/signout',
+        cbFnc: callbackUserSignout
     }
 ]
