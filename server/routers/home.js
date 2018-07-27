@@ -1,4 +1,4 @@
-const { store } = require('../services/userInfoServices')
+const store = require('../lib/store')
 
 const { formatCookie } = require('../util')
 

@@ -177,7 +177,6 @@ const userUserListService = async function(ctx) {
 
 
 module.exports = {
-    store: store,
     userSignupService: userSignupService,
     userSigninService: userSigninService,
     userSignoutService: userSignoutService,

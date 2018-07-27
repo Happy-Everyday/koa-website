@@ -11,6 +11,7 @@ const app = new Koa()
 const { port, dbUrl, corsConfig} = require('./config')
 const viewsH = require('../views/index')
 const controller = require('./middleware/controller')
+const scheduleFunc = require('./middleware/schedule')
 
 const db = require('./db')
 db.connect(dbUrl, { useNewUrlParser: true })
@@ -21,6 +22,7 @@ app.use(static(path.join(__dirname, '../public')))
 app.use(views(path.join(__dirname, '../views'), viewsH))
 
 app.use(controller())
+app.use(scheduleFunc())
 app.use(cors(corsConfig))
 app.use(router.routes())
 
